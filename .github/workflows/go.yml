@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -18,8 +18,8 @@ jobs:
       with:
         go-version: 1.17
 
-    - name: Build
-      run: go build -v ./...
-
-    - name: Test
-      run: go test -v ./...
+    - name: Test bankcore
+      run: cd ./src/bankcore && go test -v && cd -
+    
+    - name: Test bankapi
+      run: cd ./src/bankapi && go test -v && cd -
