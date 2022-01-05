@@ -1,6 +1,8 @@
 package bank
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestAccount(t *testing.T) {
 	account := Account{
@@ -88,4 +90,58 @@ func TestStatement(t *testing.T) {
 		t.Error("statement doesn't have the proper format")
 	}
 
+}
+
+func TestTransfer(t *testing.T) {
+	accountA := Account{
+		Customer: Customer{
+			Name:    "Bruma",
+			Address: "Vegeta's Palace",
+			Phone:   "(999) 999 9991",
+		},
+		Number:  1001,
+		Balance: 1100,
+	}
+
+	accountB := Account{
+		Customer: Customer{
+			Name:    "Vegeta",
+			Address: "Vegeta's Palace",
+			Phone:   "(999) 999 9999",
+		},
+		Number:  1002,
+		Balance: 0,
+	}
+
+	err := accountA.Transfer(100, &accountB)
+
+	if accountA.Balance != 1000 && accountB.Balance != 100 {
+		t.Error("transfer from account A to account B is not working", err)
+	}
+}
+
+func TestTransferInvalid(t *testing.T) {
+	accountA := Account{
+		Customer: Customer{
+			Name:    "Bruma",
+			Address: "Vegeta's Palace",
+			Phone:   "(999) 999 9991",
+		},
+		Number:  1001,
+		Balance: 0,
+	}
+
+	accountB := Account{
+		Customer: Customer{
+			Name:    "Vegeta",
+			Address: "Vegeta's Palace",
+			Phone:   "(999) 999 9999",
+		},
+		Number:  1002,
+		Balance: 0,
+	}
+
+	if err := accountA.Transfer(100, &accountB); err == nil {
+		t.Error("only having enough funds should transfer money to another account")
+	}
 }
